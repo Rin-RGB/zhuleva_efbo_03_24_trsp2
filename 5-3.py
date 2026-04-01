@@ -95,7 +95,7 @@ async def get_user(response: Response,
         if elapsed > 180:
             new_token = create_token(user_id)
             set_cookie_token(response, new_token)
-            print(f"New time: {int(time.time()) - verify_token(new_token)[1]}")
+            print("Session extended")
         for username in users_db:
             if users_db[username]["id"] == user_id:
                 message = {"user": users_db[username]["name"],
