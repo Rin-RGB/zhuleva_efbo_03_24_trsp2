@@ -48,7 +48,7 @@ def verify_token(token: str):
         return None, None, "invalid"
     except Exception as e:
         print(f"Ошибка: {e}")
-        return None, None
+        return None, None, "invalid"
 
 
 @app.get('/')
@@ -81,8 +81,6 @@ async def get_user(response: Response,
         raise HTTPException(status_code=401, detail="Unauthorized")
     try:
         user_id, timestamp, status = verify_token(session_token)
-        if not user_id or not timestamp:
-            raise HTTPException(status_code=401, detail="Wrong data")
         if status == "expired":
             raise HTTPException(status_code=401, detail="Session expired")
         if status == "invalid":
