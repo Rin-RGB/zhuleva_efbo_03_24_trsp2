@@ -23,25 +23,19 @@ pip install requirements.txt
 Запустить нужное задание:  
 
 Задание 3.1:  
-uvicorn task_3_1:app --reload --port 8001  
+uvicorn 3-1:app --reload --port 8001  
 
 Задание 3.2:  
-uvicorn task_3_2:app --reload --port 8002  
+uvicorn 3-2:app --reload --port 8002  
 
 Задание 5.1:  
-uvicorn task_5_1:app --reload --port 8003  
+uvicorn 5-1:app --reload --port 8003  
 
 Задание 5.2:  
-uvicorn task_5_2:app --reload --port 8004  
+uvicorn 5-2:app --reload --port 8004  
 
 Задание 5.3:  
-uvicorn task_5_3:app --reload --port 8005  
-
-Задание 5.4:  
-uvicorn task_5_4:app --reload --port 8006  
-
-Задание 5.5:  
-uvicorn task_5_5:app --reload --port 8006
+uvicorn 5-3:app --reload --port 8005  
 
 Скриншоты для задания 5.3:
 ![Авторизация](img/post_login.png)
