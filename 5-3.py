@@ -39,6 +39,8 @@ def verify_token(token: str):
     try:
         message = signer.unsign(token).decode('utf-8')
         parts = message.split('.')
+        if len(parts) != 2:
+            return None, None, "invalid_format"
         user_id = parts[0]
         timestamp = int(parts[1])
         return user_id, timestamp, "valid"
@@ -81,6 +83,8 @@ async def get_user(response: Response,
         raise HTTPException(status_code=401, detail="Unauthorized")
     try:
         user_id, timestamp, status = verify_token(session_token)
+        if status == "invalid_format":
+            raise HTTPException(status_code=401, detail="Invalid session")
         if status == "expired":
             raise HTTPException(status_code=401, detail="Session expired")
         if status == "invalid":
