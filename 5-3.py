@@ -43,9 +43,9 @@ def verify_token(token: str):
         timestamp = int(parts[1])
         return user_id, timestamp, "valid"
     except SignatureExpired:
-        return None, None, "Session expired"
+        return None, None, "expired"
     except BadSignature:
-        return None, None, "invalid session"
+        return None, None, "invalid"
     except Exception as e:
         print(f"Ошибка: {e}")
         return None, None
@@ -83,9 +83,9 @@ async def get_user(response: Response,
         user_id, timestamp, status = verify_token(session_token)
         if not user_id or not timestamp:
             raise HTTPException(status_code=401, detail="Wrong data")
-        if status == "Session expired":
+        if status == "expired":
             raise HTTPException(status_code=401, detail="Session expired")
-        if status == "Invalid session":
+        if status == "invalid":
             raise HTTPException(status_code=401, detail="Invalid session")
         message = None
         elapsed = int(time.time()) - timestamp
