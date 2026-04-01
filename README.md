@@ -4,7 +4,7 @@
 ## Инструкция по запуску
 1. Клонировать репозиторий:
 
-git clone https://github.com/mitjink/sadt_kr1  
+git clone https://github.com/Rin-RGB/zhuleva_efbo_03_24_trsp2.git
 
 2. Создать и активировать виртуальное окружение:
 
