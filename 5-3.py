@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Cookie, Form, Response, HTTPException
 from fastapi.responses import FileResponse
 from uuid import uuid4
-from itsdangerous import TimestampSigner
+from itsdangerous import TimestampSigner, BadSignature, SignatureExpired
 import time
 
 app = FastAPI()
@@ -41,7 +41,11 @@ def verify_token(token: str):
         parts = message.split('.')
         user_id = parts[0]
         timestamp = int(parts[1])
-        return user_id, timestamp
+        return user_id, timestamp, "valid"
+    except SignatureExpired:
+        return None, None, "Session expired"
+    except BadSignature:
+        return None, None, "invalid session"
     except Exception as e:
         print(f"Ошибка: {e}")
         return None, None
@@ -76,14 +80,16 @@ async def get_user(response: Response,
     if not session_token:
         raise HTTPException(status_code=401, detail="Unauthorized")
     try:
-        user_id, timestamp = verify_token(session_token)
+        user_id, timestamp, status = verify_token(session_token)
         if not user_id or not timestamp:
             raise HTTPException(status_code=401, detail="Wrong data")
+        if status == "Session expired":
+            raise HTTPException(status_code=401, detail="Session expired")
+        if status == "Invalid session":
+            raise HTTPException(status_code=401, detail="Invalid session")
         message = None
         elapsed = int(time.time()) - timestamp
         print(f"Elapsed time: {elapsed}")
-        if elapsed > 300:
-            raise HTTPException (status_code=401, detail="Session expired")
         if elapsed > 180:
             new_token = create_token(user_id)
             set_cookie_token(response, new_token)
